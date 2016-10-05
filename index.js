@@ -12,12 +12,8 @@ var plugin = function (opts) {
             var s = new stream.Readable({ objectMode: true });
             s.push(data);
             s.push(null);
-
             s.pipe(
-                jasmine({
-                    verbose: true,
-                    includeStackTrace: true
-                }))
+                jasmine(opts.jasmine_opts))
                 .on('jasmineDone', (x) => {
                     cb();
                 });
