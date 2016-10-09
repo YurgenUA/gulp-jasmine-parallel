@@ -3,14 +3,28 @@
 const qasync = require('async-queue-stream');
 const stream = require('stream');
 const jasmine = require('gulp-jasmine');
+const stdoutfixture = require('fixture-stdout');
 
-var reporters = new Map();
+let reporters = new Map();
+let consolefixture = new stdoutfixture();
 
 var plugin = function (opts) {
+
+        let consolelogs = [];
+        consolefixture.capture(function onWrite(string, encoding, fd) {
+            consolelogs.push({
+                string: string,
+                encoding: encoding,
+                fd: fd
+            });
+            return false;
+        });
+
 
     return qasync(function (data, cb) {
 
         {
+            let unhook_intercept;
             var staticReporter = {
                 jasmineStarted: function (suiteInfo) {
                     console.log('Running suite with ' + suiteInfo.totalSpecsDefined);
@@ -62,7 +76,7 @@ var plugin = function (opts) {
             s.pipe(
                 jasmine(opts.jasmine_opts))
                 .on('jasmineDone', (x) => {
-                    console.log('jasmine done', x);
+                    console.log('Jasmine done with status', x);
                     cb();
                 })
                 .on('error', x => {
@@ -72,9 +86,13 @@ var plugin = function (opts) {
         }
 
     }, () => {
+        consolefixture.release();
+
         let run_passed = 0;
         let run_total = 0;
-        console.log("==================== Cumulative statistics =======================")
+        console.log("================== Cumulative console output =====================");
+        consolelogs.forEach(x => {console.log(x.string)});
+        console.log("==================== Cumulative statistics =======================");
         for (let suite of reporters.values()) {
             console.log(`Suite '${suite.fullName}' with description '${suite.description}' statistics:`);
             console.log('\tGreen:');
@@ -82,9 +100,14 @@ var plugin = function (opts) {
                 console.log(`\t\t${passed}`);
             }
             console.log('\tRed:');
-            for (let failed of suite.failed) {
-                console.log(`\t\tmessage:${failed.message}`);
-                console.log(`\t\tstack:${failed.stack}`);
+            if (suite.failed.size == 0){
+                console.log('\t\tnothing');
+            }
+            else {
+                for (let failed of suite.failed) {
+                    console.log(`\t\tmessage:${failed.message}`);
+                    console.log(`\t\tstack:${failed.stack}`);
+                }
             }
             run_passed += suite.passed.size;
             run_total += suite.totalSpecsDefined
