@@ -10,24 +10,20 @@ let consolefixture = new stdoutfixture();
 
 var plugin = function (opts) {
 
-        let consolelogs = [];
-        consolefixture.capture(function onWrite(string, encoding, fd) {
-            consolelogs.push({
-                string: string,
-                encoding: encoding,
-                fd: fd
-            });
-            return false;
+    let consolelogs = [];
+    consolefixture.capture(function onWrite(string, encoding, fd) {
+        consolelogs.push({
+            string: string,
+            encoding: encoding,
+            fd: fd
         });
-
+        return false;
+    });
 
     return qasync(function (data, cb) {
-
         {
-            let unhook_intercept;
             var staticReporter = {
                 jasmineStarted: function (suiteInfo) {
-                    console.log('Running suite with ' + suiteInfo.totalSpecsDefined);
                     let cur_rep = reporters.get(this);
                     cur_rep.totalSpecsDefined = suiteInfo.totalSpecsDefined;
                 },
@@ -66,7 +62,7 @@ var plugin = function (opts) {
                 }
             };
 
-            reporters.set(staticReporter, { passed: new Set(), failed: new Set(), });
+            reporters.set(staticReporter, { passed: new Set(), failed: new Set(), jasmineFinalStatus: null});
             opts.jasmine_opts.reporter = staticReporter;
 
 
@@ -76,11 +72,13 @@ var plugin = function (opts) {
             s.pipe(
                 jasmine(opts.jasmine_opts))
                 .on('jasmineDone', (x) => {
-                    console.log('Jasmine done with status', x);
+                    let cur_rep = reporters.get(staticReporter);
+                    cur_rep.jasmineFinalStatus = x;
                     cb();
                 })
                 .on('error', x => {
-                    console.log('Jasmine error detected: ', x);
+                    let cur_rep = reporters.get(staticReporter);
+                    cur_rep.jasmineFinalStatus = 'error';
                     throw x;
                 });
         }
@@ -112,6 +110,8 @@ var plugin = function (opts) {
             run_passed += suite.passed.size;
             run_total += suite.totalSpecsDefined
             console.log(`\tIn current suite: passed ${suite.passed.size} out of ${suite.totalSpecsDefined}.`);
+            console.log('Jasmine done with status', suite.jasmineFinalStatus);
+            
         }
         console.log(`Whole run: passed ${run_passed} out of ${run_total}.`);
 
