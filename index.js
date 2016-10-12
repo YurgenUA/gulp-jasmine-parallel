@@ -62,7 +62,7 @@ var plugin = function (opts) {
                 }
             };
 
-            reporters.set(staticReporter, { passed: new Set(), failed: new Set(), jasmineFinalStatus: null});
+            reporters.set(staticReporter, { passed: new Set(), failed: new Set(), jasmineFinalStatus: null });
             opts.jasmine_opts.reporter = staticReporter;
 
 
@@ -89,7 +89,7 @@ var plugin = function (opts) {
         let run_passed = 0;
         let run_total = 0;
         console.log("================== Cumulative console output =====================");
-        consolelogs.forEach(x => {console.log(x.string)});
+        consolelogs.forEach(x => { console.log(x.string) });
         console.log("==================== Cumulative statistics =======================");
         for (let suite of reporters.values()) {
             console.log(`Suite '${suite.fullName}' with description '${suite.description}' statistics:`);
@@ -97,11 +97,8 @@ var plugin = function (opts) {
             for (let passed of suite.passed) {
                 console.log(`\t\t${passed}`);
             }
-            console.log('\tRed:');
-            if (suite.failed.size == 0){
-                console.log('\t\tnothing');
-            }
-            else {
+            if (suite.failed.size != 0) {
+                console.log('\tRed:');
                 for (let failed of suite.failed) {
                     console.log(`\t\tmessage:${failed.message}`);
                     console.log(`\t\tstack:${failed.stack}`);
@@ -111,7 +108,7 @@ var plugin = function (opts) {
             run_total += suite.totalSpecsDefined
             console.log(`\tIn current suite: passed ${suite.passed.size} out of ${suite.totalSpecsDefined}.`);
             console.log('Jasmine done with status', suite.jasmineFinalStatus);
-            
+
         }
         console.log(`Whole run: passed ${run_passed} out of ${run_total}.`);
 
