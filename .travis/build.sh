@@ -1,3 +1,3 @@
 echo "build.ch executing..."
-npm install
+npm i
 gulp unit-test
