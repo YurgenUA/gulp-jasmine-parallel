@@ -1,17 +1,24 @@
 {
   "name": "gulp-jasmine-parallel",
   "version": "0.0.1",
-  "description": "",
+  "description": "npm package for running Jasmine tests in parallel",
+  "homepage": "https://github.com/YurgenUA/gulp-jasmine-parallel",  
   "main": "index.js",
+  "author": "YurgenUA",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YurgenUA/gulp-jasmine-parallel"
+  },  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "gulp",
     "jasmine",
-    "parallel"
+    "parallel",
+    "testing"
   ],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "async-queue-stream": "^0.1.3",
     "fixture-stdout": "^0.2.1",

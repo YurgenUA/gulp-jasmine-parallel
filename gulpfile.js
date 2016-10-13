@@ -21,3 +21,22 @@ gulp.task('default', function () {
            console.log('gulp on error');
         });
 });
+
+gulp.task('unit-test', (cb) => {
+    return gulp.src([
+        './tests/**/*.test.js'
+    ])
+        .pipe(jasmine({
+            timeout: 1000,
+            verbose: true,
+            integration: true,
+            abortOnTestFailure: true
+        }))
+        .on('done', function (result) {
+            if (result.failed) {
+                cb('test(s) failed');
+            } else {
+                cb(null);
+            }
+        });
+});
