@@ -1,3 +1,6 @@
 echo "build.ch executing..."
-npm i
+echo "listing installed packages..."
+npm list
+echo "(re)installed packages..."
+npm install
 gulp unit-test
