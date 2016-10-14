@@ -25,4 +25,14 @@ gulp.task('default', function () {
         }));
 });
 ```
+## API
 
+### jasmine-parallel([options])
+
+#### concurrency_value
+Type:number
+The amount of simultaneously invoked suits. (The best scenario to reach the desired level of parallelism is to put each suite in separate js-file
+
+#### jasmine_opt
+Type: object
+gulp-jasmine package options. [See](https://www.npmjs.com/package/gulp-jasmine#jasmineoptions)
