@@ -2,13 +2,13 @@
 
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
-const plugin = require('./index');
+/*const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
     return gulp.src([
         './tests/*.js'
     ])
-        .pipe(plugin({
+        .pipe(jasmine_parallel({
             concurrency_value: 10,
             jasmine_opts: {
                 verbose: true,
@@ -21,7 +21,7 @@ gulp.task('default', function () {
            console.log('gulp on error');
         });
 });
-
+*/
 gulp.task('unit-test', (cb) => {
     return gulp.src([
         './tests/**/*.test.js'

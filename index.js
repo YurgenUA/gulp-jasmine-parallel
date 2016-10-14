@@ -8,7 +8,7 @@ const stdoutfixture = require('fixture-stdout');
 let reporters = new Map();
 let consolefixture = new stdoutfixture();
 
-var plugin = function (opts) {
+var jasmine_parallel = function (opts) {
 
     let consolelogs = [];
     consolefixture.capture(function onWrite(string, encoding, fd) {
@@ -118,4 +118,4 @@ var plugin = function (opts) {
 
 
 
-module.exports = plugin;
+module.exports = jasmine_parallel;

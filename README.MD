@@ -9,13 +9,13 @@ $ npm install --save-dev gulp-jasmine-parallel
 
 ## Usage
 ```javascript
-const jasmine-parallel = require('gulp-jasmine-parallel');
+const jasmine_parallel = require('gulp-jasmine-parallel');
 
 gulp.task('default', function () {
     return gulp.src([
         './tests/*.js'
     ])
-        .pipe(jasmine-parallel({
+        .pipe(jasmine_parallel({
             concurrency_value: 5,
             jasmine_opts: {
                 verbose: true,
@@ -27,7 +27,7 @@ gulp.task('default', function () {
 ```
 ## API
 
-### jasmine-parallel([options])
+### jasmine_parallel([options])
 
 #### concurrency_value
 Type:number.
