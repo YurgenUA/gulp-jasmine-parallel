@@ -2,13 +2,13 @@
 
 [![Build status](https://api.travis-ci.org/YurgenUA/gulp-jasmine-parallel.svg?branch=master)](https://api.travis-ci.org/YurgenUA/gulp-jasmine-parallel)
 
-Run Jasmine tests in parallel.
-
+### Run Jasmine tests in parallel.
+Package uses [gulp-jasmine](https://www.npmjs.com/package/gulp-jasmine) under the hood but allows parallel Jasmine suite running. This can be handy if you run quite time consuming tests (component, system etc.)
 ## Install
 $ npm install --save-dev gulp-jasmine-parallel
 
 ## Usage
-```bash
+```javascript
 const jasmine-parallel = require('gulp-jasmine-parallel');
 
 gulp.task('default', function () {
