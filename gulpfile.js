@@ -7,13 +7,14 @@ const jasmine = require('gulp-jasmine');
 const StdOutCapture = require('./lib/stdout.js');
 gulp.task('default', function () {
     let hidden = '';
-    let c = new StdOutCapture(process.stdout, (string, encoding, fd) => {
+    let c = new StdOutCapture();
+    c.capture((string, encoding, fd) => {
         hidden += string; 
     });
-    c.capture();
     console.log('from gulpfile');
+    c.invoke_original_stdout_write("during capture. should be immediately seen!\n");
     c.release();
-    console.log('hidden', hidden);
+    console.log('hidden string has after release:', hidden);
 });
 
 /*const jasmine_parallel = require('./index');
@@ -55,3 +56,4 @@ gulp.task('unit-test', (cb) => {
         });
 });
 
+gulp.run('default');
