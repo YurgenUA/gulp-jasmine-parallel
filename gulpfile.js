@@ -2,6 +2,20 @@
 
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
+
+
+const StdOutCapture = require('./lib/stdout.js');
+gulp.task('default', function () {
+    let hidden = '';
+    let c = new StdOutCapture(process.stdout, (string, encoding, fd) => {
+        hidden += string; 
+    });
+    c.capture();
+    console.log('from gulpfile');
+    c.release();
+    console.log('hidden', hidden);
+});
+
 /*const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
@@ -40,3 +54,4 @@ gulp.task('unit-test', (cb) => {
             }
         });
 });
+
