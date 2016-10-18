@@ -3,28 +3,15 @@
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
 
-
-const StdOutCapture = require('./lib/stdout.js');
-gulp.task('default', function () {
-    let hidden = '';
-    let c = new StdOutCapture();
-    c.capture((string, encoding, fd) => {
-        hidden += string; 
-    });
-    console.log('from gulpfile');
-    c.invoke_original_stdout_write("during capture. should be immediately seen!\n");
-    c.release();
-    console.log('hidden string has after release:', hidden);
-});
-
-/*const jasmine_parallel = require('./index');
+/*
+const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
     return gulp.src([
-        './tests/*.js'
+        './tests/unit*.js'
     ])
         .pipe(jasmine_parallel({
-            concurrency_value: 10,
+            concurrency_value: 2,
             jasmine_opts: {
                 verbose: true,
                 includeStackTrace: true,
@@ -37,6 +24,7 @@ gulp.task('default', function () {
         });
 });
 */
+
 gulp.task('unit-test', (cb) => {
     return gulp.src([
         './tests/**/*.test.js'
@@ -55,5 +43,3 @@ gulp.task('unit-test', (cb) => {
             }
         });
 });
-
-gulp.run('default');
