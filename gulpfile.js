@@ -2,14 +2,14 @@
 
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
-/*const jasmine_parallel = require('./index');
+const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
     return gulp.src([
-        './tests/*.js'
+        './tests/unit*.js'
     ])
         .pipe(jasmine_parallel({
-            concurrency_value: 10,
+            concurrency_value: 2,
             jasmine_opts: {
                 verbose: true,
                 includeStackTrace: true,
@@ -17,11 +17,11 @@ gulp.task('default', function () {
             }
         }))
         .on('error', function (err) {
-           // throw new Error(err);
-           console.log('gulp on error');
+            // throw new Error(err);
+            console.log('gulp on error');
         });
 });
-*/
+
 gulp.task('unit-test', (cb) => {
     return gulp.src([
         './tests/**/*.test.js'
