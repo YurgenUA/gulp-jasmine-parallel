@@ -2,22 +2,8 @@
 
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
-
-
 const StdOutCapture = require('./lib/stdout.js');
-gulp.task('default', function () {
-    let hidden = '';
-    let c = new StdOutCapture();
-    c.capture((string, encoding, fd) => {
-        hidden += string; 
-    });
-    console.log('from gulpfile');
-    c.invoke_original_stdout_write("during capture. should be immediately seen!\n");
-    c.release();
-    console.log('hidden string has after release:', hidden);
-});
-
-/*const jasmine_parallel = require('./index');
+const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
     return gulp.src([
@@ -32,11 +18,11 @@ gulp.task('default', function () {
             }
         }))
         .on('error', function (err) {
-           // throw new Error(err);
-           console.log('gulp on error');
+            // throw new Error(err);
+            console.log('gulp on error');
         });
 });
-*/
+
 gulp.task('unit-test', (cb) => {
     return gulp.src([
         './tests/**/*.test.js'
@@ -55,5 +41,3 @@ gulp.task('unit-test', (cb) => {
             }
         });
 });
-
-gulp.run('default');

@@ -3,10 +3,10 @@
 const qasync = require('async-queue-stream');
 const stream = require('stream');
 const jasmine = require('gulp-jasmine');
-const stdoutfixture = require('fixture-stdout');
+const StdOutCapture = require('./lib/stdout.js');
 
 let reporters = new Map();
-let consolefixture = new stdoutfixture();
+let consolefixture = new StdOutCapture();
 
 var jasmine_parallel = function (opts) {
 
@@ -39,6 +39,7 @@ var jasmine_parallel = function (opts) {
                     let cur_rep = reporters.get(this);
                     if (result.status == 'passed') {
                         cur_rep.passed.add(result.description);
+                        consolefixture.invoke_original_stdout_write("+");
                     };
                     if (result.status == 'failed') {
                         for (var i = 0; i < result.failedExpectations.length; i++) {
@@ -47,6 +48,7 @@ var jasmine_parallel = function (opts) {
                                 stack: result.failedExpectations[i].stack
                             });
                         }
+                        consolefixture.invoke_original_stdout_write("-");
                     }
                 },
                 suiteDone: function (result) {
@@ -88,6 +90,7 @@ var jasmine_parallel = function (opts) {
 
         let run_passed = 0;
         let run_total = 0;
+        console.log("\n");
         console.log("================== Cumulative console output =====================");
         consolelogs.forEach(x => { console.log(x.string) });
         console.log("==================== Cumulative statistics =======================");
