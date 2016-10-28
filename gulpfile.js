@@ -2,15 +2,14 @@
 
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
-const StdOutCapture = require('./lib/stdout.js');
 const jasmine_parallel = require('./index');
 
 gulp.task('default', function () {
     return gulp.src([
-        './tests/*.js'
+        './tests/unit*.js'
     ])
         .pipe(jasmine_parallel({
-            concurrency_value: 10,
+            concurrency_value: 2,
             jasmine_opts: {
                 verbose: true,
                 includeStackTrace: true,
