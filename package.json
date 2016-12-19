@@ -1,6 +1,6 @@
 {
   "name": "gulp-jasmine-parallel",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "npm package for running Jasmine tests in parallel",
   "homepage": "https://github.com/YurgenUA/gulp-jasmine-parallel",
   "main": "index.js",

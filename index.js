@@ -43,6 +43,7 @@ var jasmine_parallel = function (opts) {
                     if (result.status == 'failed') {
                         for (var i = 0; i < result.failedExpectations.length; i++) {
                             cur_rep.failed.add({
+                                description: result.description,
                                 message: result.failedExpectations[i].message,
                                 stack: result.failedExpectations[i].stack
                             });
@@ -90,15 +91,14 @@ var jasmine_parallel = function (opts) {
         console.log("==================== Cumulative statistics =======================");
         for (let suite of reporters.values()) {
             console.log(`Suite '${suite.fullName}' with description '${suite.description}' statistics:`);
-            console.log('\tGreen:');
             for (let passed of suite.passed) {
-                console.log(`\t\t${passed}`);
+                console.log(`'\x1B[32m\ttest: ${passed}\x1B[39m`);
             }
             if (suite.failed.size != 0) {
-                console.log('\tRed:');
                 for (let failed of suite.failed) {
-                    console.log(`\t\tmessage:${failed.message}`);
-                    console.log(`\t\tstack:${failed.stack}`);
+                    console.log(`\x1B[31m\ttest: ${failed.description}\x1B[39m`);
+                    console.log(`\t\tmessage: ${failed.message}`);
+                    console.log(`\t\tstack: ${failed.stack}`);
                 }
             }
             run_passed += suite.passed.size;
