@@ -37,5 +37,12 @@ The amount of simultaneously invoked suits. (The best scenario to reach the desi
 Type: object.
 gulp-jasmine package options. [See](https://www.npmjs.com/package/gulp-jasmine#jasmineoptions)
 
+#### done_callback
+Mandatory: optional
+Type: function.
+Callback function to be called when as the very last step.
+Params: all_tests_passed - boolean
+
+
 ### License
 MIT

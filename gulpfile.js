@@ -4,7 +4,7 @@ const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
 const jasmine_parallel = require('./index');
 
-gulp.task('default', function () {
+gulp.task('default', function (cb) {
     return gulp.src([
         './tests/unit*.js'
     ])
@@ -14,12 +14,23 @@ gulp.task('default', function () {
                 verbose: true,
                 includeStackTrace: true,
                 errorOnFail: false
+            },
+            done_callback: (result) => {
+                console.log('---------- in done_callback(...)', result);
+                if (result)
+                    return cb();
+                else
+                    return cb('error');
             }
         }))
+        .on('done', function (result) {
+            console.log('gulp on done');
+            cb(null);
+        })
         .on('error', function (err) {
-            // throw new Error(err);
             console.log('gulp on error');
-        });
+            cb(err);
+        })
 });
 
 gulp.task('unit-test', (cb) => {

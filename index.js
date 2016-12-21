@@ -38,7 +38,7 @@ var jasmine_parallel = function (opts) {
                     let cur_rep = reporters.get(this);
                     if (result.status == 'passed') {
                         cur_rep.passed.add(result.description);
-                        stdout_capture.invoke_original_stdout_write( '+');
+                        stdout_capture.invoke_original_stdout_write( '\x1B[32m+\x1B[39m');
                     };
                     if (result.status == 'failed') {
                         for (var i = 0; i < result.failedExpectations.length; i++) {
@@ -48,7 +48,7 @@ var jasmine_parallel = function (opts) {
                                 stack: result.failedExpectations[i].stack
                             });
                         }
-                        stdout_capture.invoke_original_stdout_write("-");
+                        stdout_capture.invoke_original_stdout_write('\x1B[31m-\x1B[39m');
                     }
                 },
                 suiteDone: function (result) {
@@ -77,7 +77,7 @@ var jasmine_parallel = function (opts) {
                 .on('error', x => {
                     let cur_rep = reporters.get(staticReporter);
                     cur_rep.jasmineFinalStatus = 'error';
-                    throw x;
+                    cb(x);
                 });
         }
 
@@ -86,13 +86,14 @@ var jasmine_parallel = function (opts) {
 
         let run_passed = 0;
         let run_total = 0;
+        let cumulative_jasmine_status = true;
         console.log("\n================== Cumulative console output =====================");
         consolelogs.forEach(x => { console.log(x.string) });
         console.log("==================== Cumulative statistics =======================");
         for (let suite of reporters.values()) {
             console.log(`Suite '${suite.fullName}' with description '${suite.description}' statistics:`);
             for (let passed of suite.passed) {
-                console.log(`'\x1B[32m\ttest: ${passed}\x1B[39m`);
+                console.log(`\x1B[32m\ttest: ${passed}\x1B[39m`);
             }
             if (suite.failed.size != 0) {
                 for (let failed of suite.failed) {
@@ -104,12 +105,23 @@ var jasmine_parallel = function (opts) {
             run_passed += suite.passed.size;
             run_total += suite.totalSpecsDefined
             console.log(`\tIn current suite: passed ${suite.passed.size} out of ${suite.totalSpecsDefined}.`);
-            console.log('Jasmine done with status', suite.jasmineFinalStatus);
+            if (!suite.jasmineFinalStatus)
+                cumulative_jasmine_status = false;
 
         }
         console.log(`Whole run: passed ${run_passed} out of ${run_total}.`);
+        console.log('Jasmine finished whole run with status', cumulative_jasmine_status ? "\x1B[32mOK!\x1B[39m": "\x1B[31mFailed:(\x1B[39m");
 
-    }, { concurrency: opts.concurrency_value })
+        if (opts.done_callback){
+            opts.done_callback(cumulative_jasmine_status);
+        }
+        if(!cumulative_jasmine_status){
+            // Throwing error since at least one run has error
+           throw new Error('Jasmine finished whole run with status FAILED:()')
+        }
+
+        
+    }, { concurrency: opts.concurrency_value, error_event : 'error' })
 };
 
 
